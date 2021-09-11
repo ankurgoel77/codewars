@@ -1,3 +1,5 @@
+//https://www.codewars.com/kata/5226eb40316b56c8d500030f/train/rust
+
 fn pascals_triangle(n: usize) -> Vec<usize> {
     let mut triangle : Vec<Vec<usize>>  = Vec::new();
     let mut flat : Vec<usize> = Vec::new();
