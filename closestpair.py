@@ -5,22 +5,13 @@ import random
 import math
 
 def closest_pair(points):
-    # first, loop through all points to get footprint of the points
-    (x_min, y_min, x_max, y_max) = (points[0][0], points[0][1], points[0][0], points[0][1])
+    # first, loop through all points to get the lower left bound
+    (x_min, y_min) = (points[0][0], points[0][1])
     for p in points:
         if p[0] < x_min:
             x_min = p[0]
-        elif p[0] > x_max:
-            x_max = p[0]
         if p[1] < y_min:
             y_min = p[1]
-        elif p[1] > y_max:
-            y_max = p[1]
-
-    if (x_max-x_min) > (y_max-y_min):
-        (w_max, w_min) = (x_max, x_min)
-    else:
-        (w_max, w_min) = (y_max, y_min)
 
     # get the minimum distance from a random sample of sqrt(n) of points
     k = math.ceil(math.sqrt(len(points)))
@@ -36,8 +27,8 @@ def closest_pair(points):
             if (x,y) == (0,0):  # points are the same, and hence distance is zero
                 return ((s[i][0],s[i][1]),(s[j][0],s[j][1]))
     
-    #assign all points to a checkerboard with squares of side d
-    # the checkerboard will have a number of sides equal to (w_max-w_min) / d
+    #assign all points to a checkerboard with squares of side d starting with (0,0) in lower left bound
+    # the board is a dictionary where keys are (i,j) positions of filled squares, and values are a list of points in that square
     board = {}
     for p in points:
         index = (math.floor((p[0]-x_min) / d), math.floor((p[1]-y_min) / d))
