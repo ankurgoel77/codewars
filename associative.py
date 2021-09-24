@@ -12,13 +12,13 @@ def build_tree(_node):
     if delta == 1:
         pass
     elif delta == 2:
-        _node.left = Node((_node.range[0],_node.range[0]+1))
-        _node.right = Node((_node.range[0]+1, _node.range[0]+2))
+        _node.left = Node([_node.range[0],_node.range[0]+1])
+        _node.right = Node([_node.range[0]+1, _node.range[0]+2])
     else:
         mid = (_node.range[1] - _node.range[0]) // 2 + _node.range[0]
-        _node.left = Node( (_node.range[0],mid) )
+        _node.left = Node( [_node.range[0] , mid] )
         build_tree(_node.left)
-        _node.right = Node( (mid,_node.range[1]) )
+        _node.right = Node( [mid , _node.range[1]] )
         build_tree(_node.right)
 
 def eval_tree(_node,arr,op):
@@ -32,22 +32,24 @@ def eval_range(_node,_range,op):
     if _node.range == _range:
         return _node.value
     else:
-        mid = _node.left[1]  # equal to _node.right[0]
-        return op(
-            eval_range(_node.left, (_range[0], mid) ),
-            eval_range(_node.right, (mid,_range[1]) )
-        )
+        mid = _node.left.range[1]  # equal to _node.right[0]
+        if _range[0] < mid and _range[1] > mid:
+            return op(
+                eval_range(_node.left, [_range[0], mid], op ),
+                eval_range(_node.right, [mid,_range[1]], op )
+            )
+        elif _range[0] >= mid:
+            return eval_range(_node.right, _range, op)
+        else:
+            return eval_range(_node.left, _range, op)
     
 
 
 def compute_ranges(arr, op, rs):
-    result = []
-    root = Node((0,len(arr)))
+    root = Node([0,len(arr)])
     build_tree(root)
     eval_tree(root, arr, op)
-    print(root.value)
-    print( eval_range(root, ))
-    return result
+    return [eval_range(root, r,op) for r in rs]
 
 def _sum(a,b): 
     return a+b
