@@ -42,14 +42,14 @@ def eval_range(_node,_range,op):
             return eval_range(_node.right, _range, op)
         else:
             return eval_range(_node.left, _range, op)
-    
-
 
 def compute_ranges(arr, op, rs):
     root = Node([0,len(arr)])
     build_tree(root)
     eval_tree(root, arr, op)
     return [eval_range(root, r,op) for r in rs]
+
+##################################################################
 
 def _sum(a,b): 
     return a+b
